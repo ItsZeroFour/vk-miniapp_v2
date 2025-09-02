@@ -25,11 +25,14 @@ const Video = ({ src }) => {
   }, []);
 
   return (
-    <div ref={ref}>
+    <div className={style.video__container} ref={ref}>
       {isVisible && (
         <iframe
           className={style.video}
-          src={src || "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239021&hd=2&autoplay=1"}
+          src={
+            src ||
+            "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239021&hd=2&autoplay=1"
+          }
           width="100%"
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
           frameborder="0"
