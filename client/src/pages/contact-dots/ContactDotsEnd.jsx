@@ -1,0 +1,62 @@
+import React, { useEffect } from "react";
+import style from "./ContactDotsEnd.module.scss";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Video from "../../components/video/Video";
+import useCompleteGame from "../../hooks/useCompleteGame";
+
+const ContactDotsEnd = React.memo(({ finalUserId }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const completeGame = useCompleteGame();
+
+  const isCompleted = location.state?.isCompleted;
+
+  useEffect(() => {
+    if (isCompleted === undefined || (isCompleted === null && !isCompleted)) {
+      return navigate("/menu/hub");
+    }
+  }, [isCompleted, navigate]);
+
+  useEffect(() => {
+    const markGameAsComplete = async () => {
+      const result = await completeGame(finalUserId, "third_game");
+
+      if (!result.success) {
+        console.error("Failed to complete game:", result.error);
+      }
+    };
+
+    markGameAsComplete();
+  }, [finalUserId, completeGame]);
+
+  return (
+    <section className={style.contact_dots_end}>
+      <div className="container">
+        <div className={style.contact_dots_end__wrapper}>
+          <h1>Вы справились!</h1>
+
+          <p>
+            Поздравляем! Все кадры открыты. <br /> А увидеть всю картину можно
+            будет во всех кинотеатрах страны. <br /> «Август» - в кино с 25
+            сентября.
+          </p>
+
+          <div className={style.contact_dots_end__main}>
+            <div className={style.contact_dots_end__video}>
+              <Video />
+            </div>
+
+            <div className={style.contact_dots_end__buttons}>
+              <Link to="/menu/hub/game2">НАЧАТЬ ИГРУ ЗАНОВО</Link>
+              <Link to="/menu/hub" state={{ hiddenVideo: true }}>
+                ДРУГИЕ ИГРЫ
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+});
+
+export default ContactDotsEnd;
