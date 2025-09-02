@@ -15,8 +15,6 @@ const Task = React.memo(
     const { userId, userData } = useUser();
     const { accessToken } = useVKAuth(userId);
 
-    console.log(userData);
-
     const items = [
       {
         bg: "/images/main/tasks/bg/bg-1.webp",
@@ -65,11 +63,10 @@ const Task = React.memo(
     const handleItemClick = (item, e) => {
       e.preventDefault();
 
-      if (isSubscribe) {
+      if (finalUserId) {
         navigate(item.path);
       } else {
-        navigate(item.path);
-        // setShowPopup(true);
+        setShowPopup(true);
       }
     };
 
