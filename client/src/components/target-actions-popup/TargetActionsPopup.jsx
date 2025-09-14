@@ -35,8 +35,6 @@ const TargetActionsPopup = ({
 
   const wrapperRef = useRef(null);
 
-  console.log(isCommented, isSubscribe, isShared);
-
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
