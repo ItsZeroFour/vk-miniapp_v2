@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import style from "./header.module.scss";
 import logo from "../../assets/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ToggleVolume from "../toggle_volume/ToggleVolume";
 import { motion, AnimatePresence } from "framer-motion";
 import useDisableScroll from "../../hooks/useDisableScroll";
@@ -23,6 +23,7 @@ const Header = ({ finalUserId, user }) => {
   const { isMiniApp } = useVkEnvironment();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { userId } = useUser();
   const { accessToken } = useVKAuth(userId);
@@ -90,9 +91,26 @@ const Header = ({ finalUserId, user }) => {
         </nav>
 
         <div className={style.header__buttons}>
-          <button>КУПИТЬ БИЛЕТЫ</button>
+          <button
+            onClick={() =>
+              (window.location.href = "https://www.kinopoisk.ru/film/1234808")
+            }
+          >
+            КУПИТЬ БИЛЕТЫ
+          </button>
 
-          <button onClick={() => navigate("/menu/hub")}>
+          <button
+            onClick={() => setOpenMenu(!openMenu)}
+            // onClick={() => {
+            //   if (location.pathname === "/") {
+            //     window.location.href = "https://augustmovie.ru";
+            //   } else if (location.pathname === "/menu/hub") {
+            //     window.location.href = "https://augustmovie.ru";
+            //   } else {
+            //     window.location.href = "/";
+            //   }
+            // }}
+          >
             <img src={close} alt="close" />
           </button>
         </div>
@@ -141,41 +159,41 @@ const Header = ({ finalUserId, user }) => {
                 </motion.ul>
               </nav>
             ) : (
-              <nav>
+              <nav className={style.header__menu__nav}>
                 <motion.ul>
                   {[
                     {
-                      title: "КОДЕКС СМЕРШ",
-                      path: "/menu/hub",
+                      title: "Главная",
+                      path: "https://augustmovie.ru",
                     },
 
                     {
                       title: "ПРОЙТИ КУРС РАЗВЕДЧИКА",
-                      path: "/menu/hub",
+                      path: "/",
                     },
 
                     {
-                      title: "КОМАНДА",
-                      path: "/menu/hub",
+                      title: "Работа СМЕРШа",
+                      path: "https://augustmovie.ru/work.html",
                     },
 
                     {
-                      title: "МИССИЯ",
-                      path: "/menu/hub",
+                      title: "Команда",
+                      path: "https://augustmovie.ru/team.html",
                     },
 
                     {
-                      title: "СЕКРЕТНЫЕ МАТЕРИАЛЫ",
-                      path: "/menu/hub",
+                      title: "Миссия",
+                      path: "https://augustmovie.ru/mission.html",
                     },
 
                     {
-                      title: "КУПИТЬ БИЛЕТЫ",
-                      path: "/menu/hub",
+                      title: "Секретные материалы",
+                      path: "https://augustmovie.ru/materials.html",
                     },
                   ].map(({ title, path }, index) => (
                     <motion.li key={index} variants={itemVariants}>
-                      {index === 1 ? (
+                      {index === -1 ? (
                         <button onClick={() => setShowOtherLinks(true)}>
                           {title}
                         </button>
