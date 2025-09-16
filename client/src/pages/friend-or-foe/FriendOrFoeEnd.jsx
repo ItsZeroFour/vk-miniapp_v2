@@ -3,12 +3,11 @@ import style from "./FriendOrFoeEnd.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { items } from "../../data/friend-or-foe";
 import Video from "../../components/video/Video";
-import useCompleteGame from "../../hooks/useCompleteGame";
+import axios from "../../utils/axios";
 
 const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const completeGame = useCompleteGame();
 
   const answers = location.state?.answers;
   const isEnd = location.state?.isEnd;
@@ -24,15 +23,27 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      const result = await completeGame(finalUserId, "second_game");
+      if (isEnd) {
+        const gameResults = {
+          friendCount: friendCount,
+          isEnd: isEnd,
+        };
 
-      if (!result.success) {
-        console.error("Failed to complete game:", result.error);
+        axios
+          .post("/user/complete-second-game", gameResults)
+          .then((response) => {
+            if (response.data.success) {
+              console.log("Победа засчитана");
+            } else {
+              console.log("Вы еще не победили");
+            }
+          });
       }
     };
 
     markGameAsComplete();
-  }, [finalUserId, completeGame]);
+  }, [finalUserId]);
+
   const videoSrc =
     friendCount >= items.length
       ? "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239019&hd=2&autoplay=1"
